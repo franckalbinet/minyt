@@ -5,4 +5,11 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://franckalbinet.github.io',
                 'git_url': 'https://github.com/franckalbinet/minyt',
                 'lib_path': 'minyt'},
-  'syms': {'minyt.core': {'minyt.core.foo': ('core.html#foo', 'minyt/core.py')}}}
+  'syms': { 'minyt.core': { 'minyt.core.detect_silence': ('core.html#detect_silence', 'minyt/core.py'),
+                            'minyt.core.download_audio': ('core.html#download_audio', 'minyt/core.py'),
+                            'minyt.core.find_split_points': ('core.html#find_split_points', 'minyt/core.py'),
+                            'minyt.core.get_audio_duration': ('core.html#get_audio_duration', 'minyt/core.py'),
+                            'minyt.core.get_mime_type': ('core.html#get_mime_type', 'minyt/core.py'),
+                            'minyt.core.parse_silence_ends': ('core.html#parse_silence_ends', 'minyt/core.py'),
+                            'minyt.core.split_audio': ('core.html#split_audio', 'minyt/core.py'),
+                            'minyt.core.transcribe_audio': ('core.html#transcribe_audio', 'minyt/core.py')}}}
