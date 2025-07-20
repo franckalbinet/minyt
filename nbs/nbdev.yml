@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "minyt"
+  site-url: "https://franckalbinet.github.io/minyt"
+  description: "Donwload audio from a youtube video and use Gemini LLM for cleaner and smarter transcibes"
+  repo-branch: main
+  repo-url: "https://github.com/franckalbinet/minyt"
