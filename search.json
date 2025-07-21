@@ -1,0 +1,112 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "minyt",
+    "section": "",
+    "text": "minyt (WIP) is a Python package that simplifies the process of downloading YouTube audio and generating high-quality transcripts using Google’s Gemini AI. It intelligently splits long audio files at natural silence points and processes chunks in parallel for optimal performance.",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#features",
+    "href": "index.html#features",
+    "title": "minyt",
+    "section": "Features",
+    "text": "Features\n\nYouTube Audio Download: Extract audio from any YouTube video using yt-dlp\nSmart Audio Splitting: Automatically detect silence and split audio at natural break points\nAI-Powered Transcription: Use Google’s Gemini 2.0 Flash for accurate, context-aware transcriptions\nParallel Processing: Process multiple audio chunks concurrently for faster results\nCustomizable: Configure chunk sizes, silence detection, and transcription prompts\nClean Output: Generate well-formatted transcripts ready for analysis",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#quick-start",
+    "href": "index.html#quick-start",
+    "title": "minyt",
+    "section": "Quick Start",
+    "text": "Quick Start\n\nInstallation\npip install minyt\n\n\nPrerequisites\n\nFFmpeg: Required for audio processing\n# macOS\nbrew install ffmpeg\n\n# Ubuntu/Debian\nsudo apt update && sudo apt install ffmpeg\n\n# Windows\n# Download from https://ffmpeg.org/download.html\nGoogle Gemini API Key: Get your API key from Google AI Studio\nexport GEMINI_API_KEY=\"your-api-key-here\"\n\n\n\nBasic Usage\nimport asyncio\nfrom pathlib import Path\nfrom minyt.core import *\n\n# Download audio from a YouTube video\nvideo_id = \"dQw4w9WgXcQ\"  # Replace with your video ID\naudio_file = download_audio(video_id, Path(\"_audio\"))\n\n# Detect silence and find optimal split points\n_, silence_data = detect_silence(audio_file)\nsilence_ends = parse_silence_ends(silence_data)\ntotal_duration = get_audio_duration(audio_file)\nsplit_points = find_split_points(silence_ends, total_duration, chunk_len=600)\n\n# Split audio into manageable chunks\nchunks = split_audio(audio_file, split_points, dest_dir=\"_audio_chunks\")\n\n# Transcribe all chunks using Gemini AI\nasync def main():\n    transcript = await transcribe_audio(\n        chunks_dir=\"_audio_chunks\",\n        dest_file=\"_transcripts/transcript.txt\",\n        prompt=\"Please transcribe this audio file verbatim, maintaining speaker clarity and context.\"\n    )\n    print(f\"Transcript saved to: _transcripts/transcript.txt\")\n\nasyncio.run(main())",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#detailed-usage",
+    "href": "index.html#detailed-usage",
+    "title": "minyt",
+    "section": "Detailed Usage",
+    "text": "Detailed Usage\n\nStep 1: Download YouTube Audio\nfrom minyt.core import download_audio\nfrom pathlib import Path\n\n# Download audio from a YouTube video\nvideo_id = \"your-video-id-here\"\naudio_file = download_audio(video_id, Path(\"downloads\"))\nprint(f\"Audio downloaded to: {audio_file}\")\n\n\nStep 2: Process Audio with Smart Splitting\nfrom minyt.core import detect_silence, parse_silence_ends, find_split_points, split_audio\n\n# Detect silence in the audio file\n_, silence_data = detect_silence(audio_file)\n\n# Parse silence end points\nsilence_ends = parse_silence_ends(silence_data)\n\n# Find optimal split points (aiming for 10-minute chunks)\ntotal_duration = get_audio_duration(audio_file)\nsplit_points = find_split_points(silence_ends, total_duration, chunk_len=600)\n\n# Split audio into chunks\nchunks = split_audio(audio_file, split_points, dest_dir=\"audio_chunks\")\nprint(f\"Created {len(chunks)} audio chunks\")\n\n\nStep 3: Transcribe with Gemini AI\nimport asyncio\nfrom minyt.core import transcribe_audio\n\nasync def transcribe_video():\n    transcript = await transcribe_audio(\n        chunks_dir=\"audio_chunks\",\n        dest_file=\"transcripts/final_transcript.txt\",\n        model=\"gemini-2.0-flash-001\",  # Default model\n        max_concurrent=3,  # Process 3 chunks simultaneously\n        prompt=\"Please transcribe this audio accurately, preserving speaker names and technical terms.\"\n    )\n    return transcript\n\n# Run transcription\ntranscript = asyncio.run(transcribe_video())\nprint(\"Transcription completed!\")",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#configuration",
+    "href": "index.html#configuration",
+    "title": "minyt",
+    "section": "Configuration",
+    "text": "Configuration\n\nEnvironment Variables\n# Required\nexport GEMINI_API_KEY=\"your-gemini-api-key\"\n\n# Optional: Configure logging level\nexport LOG_LEVEL=\"INFO\"\n\n\nCustomization Options\n# Custom silence detection (adjust sensitivity)\n_, silence_data = detect_silence(audio_file)  # Uses -30dB threshold, 0.5s duration\n\n# Custom chunk size (in seconds)\nsplit_points = find_split_points(silence_ends, total_duration, chunk_len=300)  # 5-minute chunks\n\n# Custom transcription settings\ntranscript = await transcribe_audio(\n    chunks_dir=\"chunks\",\n    dest_file=\"output.txt\",\n    model=\"gemini-2.0-flash-001\",  # Different Gemini model\n    max_concurrent=5,  # More parallel processing\n    prompt=\"Custom transcription instructions here...\"\n)",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#development",
+    "href": "index.html#development",
+    "title": "minyt",
+    "section": "Development",
+    "text": "Development\n\nInstall in Development Mode\n# Clone the repository\ngit clone https://github.com/franckalbinet/minyt.git\ncd minyt\n\n# Install in development mode\npip install -e .\n\n# Make changes in the nbs/ directory\n# ...\n\n# Compile changes to apply to minyt package\nnbdev_prepare\n\n\nDependencies\n\nfastcore: Core utilities\ngoogle-genai: Google Gemini AI client\nyt-dlp: YouTube video downloader\nffmpeg-python: Audio processing\ntqdm: Progress bars\nrich: Enhanced console output",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#contributing",
+    "href": "index.html#contributing",
+    "title": "minyt",
+    "section": "Contributing",
+    "text": "Contributing\nContributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#license",
+    "href": "index.html#license",
+    "title": "minyt",
+    "section": "License",
+    "text": "License\nThis project is licensed under the Apache License 2.0 - see the LICENSE file for details.",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#acknowledgments",
+    "href": "index.html#acknowledgments",
+    "title": "minyt",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\n\nyt-dlp for YouTube video downloading\nGoogle Gemini for AI-powered transcription\nFFmpeg for audio processing capabilities",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "index.html#support",
+    "href": "index.html#support",
+    "title": "minyt",
+    "section": "Support",
+    "text": "Support\nIf you encounter any issues or have questions:\n\nCheck the documentation\nOpen an issue\nContact the maintainer: franckalbinet@gmail.com",
+    "crumbs": [
+      "minyt"
+    ]
+  },
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "source\n\ndownload_audio\n\n download_audio (vid_id:str, dest_dir:pathlib.Path)\n\nDownload audio from YouTube video\n\n\n\n\nType\nDetails\n\n\n\n\nvid_id\nstr\nYouTube video ID\n\n\ndest_dir\nPath\nOutput directory\n\n\n\n\n\nExported source\ngemini_api_key = os.getenv(\"GEMINI_API_KEY\")\n\n\n\n\nExported source\nlogging.basicConfig(level=logging.INFO, \n                    format='%(asctime)s - %(levelname)s - %(message)s')\n\n\n\n\nExported source\ndef download_audio(\n    vid_id: str, # YouTube video ID\n    dest_dir: Path # Output directory\n    ):\n    \"Download audio from YouTube video\"\n    logging.info(f\"Downloading audio for video {vid_id}\")\n    Path(dest_dir).mkdir(exist_ok=True)\n    out_file = Path(dest_dir)/f'{vid_id}.mp3'\n    if not out_file.exists():\n        subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', f'https://www.youtube.com/watch?v={vid_id}', '-o', str(out_file)], check=True)\n        logging.info(f\"Downloaded audio to {out_file}\")\n    else:\n        logging.info(f\"Using existing audio file {out_file}\")\n    return out_file\n\n\n\nvideo_id = 'GJ0u09SIPh4'\ndownload_audio(video_id, Path('../_audio'))\n\n2025-07-20 19:09:25,533 - INFO - Downloading audio for video GJ0u09SIPh4\n\n\n[youtube] Extracting URL: https://www.youtube.com/watch?v=GJ0u09SIPh4\n[youtube] GJ0u09SIPh4: Downloading webpage\n[youtube] GJ0u09SIPh4: Downloading tv client config\n[youtube] GJ0u09SIPh4: Downloading player 69b31e11-main\n[youtube] GJ0u09SIPh4: Downloading tv player API JSON\n[youtube] GJ0u09SIPh4: Downloading ios player API JSON\n[youtube] GJ0u09SIPh4: Downloading m3u8 information\n[info] GJ0u09SIPh4: Downloading 1 format(s): 251\n[download] Destination: ../_audio/GJ0u09SIPh4.webm\n[download] 100% of   83.98MiB in 00:00:08 at 9.79MiB/s     \n[ExtractAudio] Destination: ../_audio/GJ0u09SIPh4.mp3\n\n\n2025-07-20 19:10:17,770 - INFO - Downloaded audio to ../_audio/GJ0u09SIPh4.mp3\n\n\nDeleting original file ../_audio/GJ0u09SIPh4.webm (pass -k to keep)\n\n\nPath('../_audio/GJ0u09SIPh4.mp3')\n\n\n\nsource\n\n\ndetect_silence\n\n detect_silence (audio_file:pathlib.Path)\n\nDetect silence in audio file and return start and end times\n\n\nExported source\ndef detect_silence(audio_file:Path):\n    \"Detect silence in audio file and return start and end times\"\n    stream = ffmpeg.input(str(audio_file))\n    stream = stream.filter('silencedetect', noise='-30dB', d=0.5)\n    stream = stream.output('null', f='null')\n    out, err = ffmpeg.run(stream, capture_stderr=True)\n    return out, err\n\n\n\n_, err = detect_silence(Path('../_audio/GJ0u09SIPh4.mp3'))\n\n\nsource\n\n\nparse_silence_ends\n\n parse_silence_ends (stderr_output:bytes)\n\nParse silence ends from ffmpeg stderr output\n\n\nExported source\ndef parse_silence_ends(stderr_output:bytes):\n    \"Parse silence ends from ffmpeg stderr output\"\n    pattern = r'silence_end: ([\\d.]+)'\n    matches = re.findall(pattern, stderr_output.decode())\n    return [float(match) for match in matches]\n\n\n\nends = parse_silence_ends(err); L(ends)[:10]\n\n(#10) [0.513563,15.558687,26.482021,29.918437,32.245583,34.150583,35.980771,36.597167,39.411437,43.585812]\n\n\n\nsource\n\n\nfind_split_points\n\n find_split_points (silence_ends:list[float], total_len:float,\n                    chunk_len:float=600)\n\nFind points to split audio based on silence detection, aiming for chunks of chunk_len seconds\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nsilence_ends\nlist\n\nsilence ends\n\n\ntotal_len\nfloat\n\ntotal length of the audio (in seconds)\n\n\nchunk_len\nfloat\n600\nlength of the chunks (in seconds)\n\n\n\n\n\nExported source\ndef find_split_points(\n    silence_ends:list[float], # silence ends\n    total_len:float, # total length of the audio (in seconds)\n    chunk_len:float=600 # length of the chunks (in seconds)\n    ):\n    \"Find points to split audio based on silence detection, aiming for chunks of `chunk_len` seconds\"\n    splits,target = [0],chunk_len\n    for t in silence_ends:\n        if t &gt;= target:\n            splits.append(t)\n            target += chunk_len\n    splits.append(total_len) # final chunk\n    return splits\n\n\n\nsource\n\n\nget_audio_duration\n\n get_audio_duration (audio_file:pathlib.Path|str)\n\nGet duration of audio file in seconds\n\n\nExported source\ndef get_audio_duration(audio_file:\"Path|str\"):\n    \"Get duration of audio file in seconds\"\n    probe = ffmpeg.probe(str(audio_file))\n    return float(probe['format']['duration'])\n\n\n\ntot_len = get_audio_duration(Path('../_audio/GJ0u09SIPh4.mp3')); tot_len\n\n6995.976\n\n\n\nsoft_splits = find_split_points(ends, tot_len); soft_splits\n\n[0,\n 603.482062,\n 1202.536562,\n 1802.256479,\n 2401.709521,\n 3004.959437,\n 3605.712229,\n 4206.138958,\n 4800.153625,\n 5400.729625,\n 6003.723708,\n 6610.651771,\n 6995.976]\n\n\n\nsource\n\n\nget_mime_type\n\n get_mime_type (f)\n\n\n\nExported source\ndef get_mime_type(f): return 'audio/mpeg' if Path(f).suffix.lower() == '.mp3' else 'audio/mp4'\n\n\n\nsource\n\n\nsplit_audio\n\n split_audio (fname:pathlib.Path, splits:list,\n              dest_dir:str|pathlib.Path='_audio_chunks')\n\nSplit audio file into chunks based on split points\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nfname\nPath\n\nAudio file to split\n\n\nsplits\nlist\n\nList of timestamps in seconds to split at\n\n\ndest_dir\nstr | pathlib.Path\n_audio_chunks\nDirectory to save chunks\n\n\n\n\n\nExported source\ndef split_audio(\n    fname:\"Path\", # Audio file to split\n    splits:\"list\", # List of timestamps in seconds to split at\n    dest_dir:'str|Path'=\"_audio_chunks\"): # Directory to save chunks\n    \"Split audio file into chunks based on split points\"\n    Path(dest_dir).mkdir(exist_ok=True)\n    chunks = []\n    for i, start_time in tqdm(enumerate(splits[:-1]), total=len(splits)-1):\n        duration = splits[i+1] - start_time\n        chunk_name = f\"{fname.stem}_chunk_{i+1:02d}.mp3\"\n        output_path = Path(dest_dir)/chunk_name\n        chunks.append(output_path)\n        (ffmpeg\n         .input(str(fname), ss=start_time, t=duration)\n         .output(str(output_path), acodec='copy')\n         .overwrite_output()\n         .run(capture_stdout=True, capture_stderr=True))\n    return chunks\n\n\n\nsplit_audio(Path('../_audio/GJ0u09SIPh4.mp3'), soft_splits, dest_dir='../_audio/_audio_chunks')\n\n100%|██████████| 12/12 [00:02&lt;00:00,  5.70it/s]\n\n\n[Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_01.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_02.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_03.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_04.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_05.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_06.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_07.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_08.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_09.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_10.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_11.mp3'),\n Path('../_audio/_audio_chunks/GJ0u09SIPh4_chunk_12.mp3')]\n\n\n\nsource\n\n\ntranscribe_audio\n\n transcribe_audio (chunks_dir:str|pathlib.Path,\n                   dest_file:str|pathlib.Path,\n                   model:str='gemini-2.0-flash-001', max_concurrent:int=3,\n                   prompt:str='Please transcribe this audio file:')\n\nTranscribe audio chunks in parallel and combine into single transcript\n\n\n\n\n\n\n\n\n\n\nType\nDefault\nDetails\n\n\n\n\nchunks_dir\nstr | pathlib.Path\n\nDirectory containing audio chunks\n\n\ndest_file\nstr | pathlib.Path\n\nFile to save transcript to\n\n\nmodel\nstr\ngemini-2.0-flash-001\nGemini model to use\n\n\nmax_concurrent\nint\n3\nMax concurrent transcriptions\n\n\nprompt\nstr\nPlease transcribe this audio file:\nCustom prompt for transcription\n\n\nReturns\nstr\n\n\n\n\n\n\n\nExported source\nasync def transcribe_audio(\n    chunks_dir:str|Path,  # Directory containing audio chunks\n    dest_file:str|Path, # File to save transcript to\n    model:str='gemini-2.0-flash-001', # Gemini model to use\n    max_concurrent:int=3,   # Max concurrent transcriptions\n    prompt:str=\"Please transcribe this audio file:\" # Custom prompt for transcription\n) -&gt; str:\n    \"Transcribe audio chunks in parallel and combine into single transcript\"\n    semaphore = asyncio.Semaphore(max_concurrent)\n    client = genai.Client(api_key=os.environ['GEMINI_API_KEY'])\n    \n    async def _transcribe_chunk(chunk_path):\n        async with semaphore:\n            audio_data = chunk_path.read_bytes()\n            audio_part = types.Part.from_bytes(\n                mime_type=get_mime_type(chunk_path), \n                data=audio_data\n            )\n            response = await client.aio.models.generate_content(\n                model=model,\n                contents=[prompt, audio_part]\n            )\n            return response.text\n    \n    chunks = sorted(Path(chunks_dir).glob(\"*.mp3\"))\n    tasks = [_transcribe_chunk(chunk) for chunk in chunks]\n    transcripts = await asyncio.gather(*tasks)\n    \n    full_transcript = '\\n'.join(transcripts)\n    dest_path = Path(dest_file)\n    dest_path.parent.mkdir(parents=True, exist_ok=True)\n    dest_path.write_text(full_transcript)\n    return full_transcript\n\n\n\ntranscript = await transcribe_audio(\n    chunks_dir=\"../_audio/_audio_chunks\", \n    dest_file=\"../_transcripts/transcript.txt\",\n    prompt=\"Please transcribe this audio file verbatim. Note that this is an academic course in French from College de France. The transcript should be in French.\"\n)\n\n2025-07-20 19:21:07,363 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:07,403 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:07,446 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:21,297 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:21,307 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:21,745 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:21,758 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:22,070 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:22,075 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:35,576 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:35,584 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:36,409 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:36,418 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:37,558 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:37,597 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:48,528 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:48,536 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:50,344 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:50,352 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:21:51,937 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:21:51,946 - INFO - AFC is enabled with max remote calls: 10.\n2025-07-20 19:22:02,123 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:22:02,547 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n2025-07-20 19:22:05,145 - INFO - HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent \"HTTP/1.1 200 OK\"\n\n\n\nprint(transcript[:1000])\n\nBien, mesdames messieurs. Merci d'être venus euh aussi nombreux. Cette affluence est impressionnante. Euh, je salue\ntoutes les personnes aussi qui vont nous suivre sur internet et peut-être sur France Culture, je ne sais pas \nencore. Et j'espère pouvoir, je vais utiliser des diapositives et pouvoir les mettre euh en ligne et les rendre \ndisponibles en ligne sur le site du du Collège de France. Alors après la leçon inaugurale prononcée le 5 avril, \ndonc nous entamons aujourd'hui les cours de l'année universitaire, de ce qui reste de l'année universitaire \n2017-2018, cette année étant déjà très avancée, les contraintes de salle et de calendrier étant ce qu'elles sont, \nil n'a pas été possible de programmer ces cours suivant un rythme hebdomadaire régulier et c'est l'année prochaine \nseulement que nous aurons droit à un créneau fixe à compter du mois de janvier euh sachant toutefois que le \nséminaire public de l'année prochaine qui va doubler le cours donc commencera en fait dès la fin novembre.\n\n\n\n\nprint(transcript[-1000:])\n\nus les enfants, les les personnes qui vivent ou les adultes qui vivent avec leurs parents. Et l'exploitation des \ndonnées du recensement se fait dans le cadre du ménage, et pas seulement dans un cadre individuel. Et donc, chaque \nfois qu'un euh une personne, adulte ou enfant, vit encore avec ses parents, on a le le renseignement pour ses \nparents, euh on a les les les fameuses variables en question pour ses parents. Donc, il y aurait pas une rupture \nradicale à introduire ces questions, mais euh toute une série d'associations euh ou de syndicats sont opposés à \ncette introduction et parle de de recensement des origines, de fichage des origines, et cetera. Je rappelle que le \nrecensement est anonyme, hein, et que il est évidemment étroitement surveillé, mais je je conçois très bien que \ntout ceci puisse se discuter. Voilà, et nous avons abordé déjà au cours de ce cours euh bien des bien des choses. \nJe vous remercie de votre formidable attention et je vous donne rendez-vous euh à lundi pour euh",
+    "crumbs": [
+      "core"
+    ]
+  }
+]
