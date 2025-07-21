@@ -178,17 +178,6 @@ transcript = await transcribe_audio(
 )
 ```
 
-## Project Structure
-
-    minyt/
-    ├── audio/ # Downloaded audio files
-    ├── audio_chunks/ # Split audio chunks
-    ├── transcripts/ # Generated transcripts
-    ├── minyt/
-    │ ├── init.py
-    │ └── core.py # Main functionality
-    └── nbs/ # Jupyter notebooks (development)
-
 ## Development
 
 ### Install in Development Mode
